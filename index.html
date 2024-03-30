@@ -3,33 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade Calculator</title>
+<title>IIT Madras GPA/CGPA Calculator</title>
 <style>
     body {
         font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
     }
     .container {
-        max-width: 500px;
+        max-width: 800px;
         margin: auto;
         padding: 20px;
         border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    #logo {
+        margin-bottom: 20px;
+    }
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    label {
+        font-weight: bold;
+    }
+    select, input[type="number"] {
+        margin-bottom: 10px;
+        padding: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
         border-radius: 5px;
+    }
+    select {
+        width: 50%;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #result {
+        margin-top: 20px;
     }
 </style>
 </head>
 <body>
 <div class="container">
-    <h2>Grade Calculator</h2>
+    <img src="your-logo.png" alt="IIT Madras Logo" id="logo">
+    <h1>IIT Madras GPA/CGPA Calculator</h1>
     <label>Select option:</label>
     <select id="optionSelect" onchange="showCGPAGradeInput()">
         <option value="gpa">GPA</option>
         <option value="cgpa">CGPA</option>
     </select>
     <div id="inputFields">
-        <label for="creditLimit">Credit Limit:</label>
-        <input type="number" id="creditLimit"><br>
         <label for="numCourses">Number of Courses:</label>
-        <input type="number" id="numCourses" onchange="generateCourseInputs()"><br>
+        <input type="number" id="numCourses" min="1" onchange="generateCourseInputs()"><br>
         <div id="courseInputs"></div>
         <div id="cgpaInputs"></div>
     </div>
@@ -81,7 +122,6 @@ function generateCourseInputs() {
 
 function calculateGrade() {
     var option = document.getElementById("optionSelect").value;
-    var creditLimit = parseFloat(document.getElementById("creditLimit").value);
     var numCourses = parseInt(document.getElementById("numCourses").value);
     var totalCredits = 0;
     var totalGradePoints = 0;
@@ -101,8 +141,9 @@ function calculateGrade() {
     } else if (option === "cgpa") {
         var completedCredit = parseFloat(document.getElementById("completedCredit").value);
         var currentCGPA = parseFloat(document.getElementById("currentCGPA").value);
-        var cgpa = ((totalGradePoints / totalCredits) * creditLimit + (completedCredit * currentCGPA)) / (completedCredit + creditLimit);
-        resultDiv.innerHTML = "Your current CGPA is: " + cgpa.toFixed(2);
+        var gpa = totalGradePoints / totalCredits;
+        var cgpa = ((gpa * totalCredits) + (completedCredit * currentCGPA)) / (totalCredits + completedCredit);
+        resultDiv.innerHTML = "Your GPA is: " + gpa.toFixed(2) + "<br>Your CGPA is: " + cgpa.toFixed(2);
     }
 }
 
