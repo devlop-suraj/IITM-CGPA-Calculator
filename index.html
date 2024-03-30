@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        max-width: 500px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Grade Calculator</h2>
+    <label>Select option:</label>
+    <select id="optionSelect" onchange="showCGPAGradeInput()">
+        <option value="gpa">GPA</option>
+        <option value="cgpa">CGPA</option>
+    </select>
+    <div id="inputFields">
+        <label for="creditLimit">Credit Limit:</label>
+        <input type="number" id="creditLimit"><br>
+        <label for="numCourses">Number of Courses:</label>
+        <input type="number" id="numCourses" onchange="generateCourseInputs()"><br>
+        <div id="courseInputs"></div>
+        <div id="cgpaInputs"></div>
+    </div>
+    <button onclick="calculateGrade()">Calculate</button>
+    <div id="result"></div>
+</div>
+
+<script>
+function showCGPAGradeInput() {
+    var option = document.getElementById("optionSelect").value;
+    var cgpaInputs = document.getElementById("cgpaInputs");
+
+    if (option === "cgpa") {
+        cgpaInputs.innerHTML = `
+            <label for="completedCredit">Completed Credits:</label>
+            <input type="number" id="completedCredit"><br>
+            <label for="currentCGPA">Current CGPA:</label>
+            <input type="number" id="currentCGPA"><br>
+        `;
+    } else {
+        cgpaInputs.innerHTML = '';
+    }
+}
+
+function generateCourseInputs() {
+    var numCourses = parseInt(document.getElementById("numCourses").value);
+    var courseInputsDiv = document.getElementById("courseInputs");
+    courseInputsDiv.innerHTML = '';
+
+    for (var i = 1; i <= numCourses; i++) {
+        var courseInput = document.createElement('div');
+        courseInput.innerHTML = `
+            <label for="credit${i}">Credit for Course ${i}:</label>
+            <input type="number" id="credit${i}">
+
+            <label for="grade${i}">Grade for Course ${i}:</label>
+            <select id="grade${i}">
+                <option value="S">S</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+            </select><br>
+        `;
+        courseInputsDiv.appendChild(courseInput);
+    }
+}
+
+function calculateGrade() {
+    var option = document.getElementById("optionSelect").value;
+    var creditLimit = parseFloat(document.getElementById("creditLimit").value);
+    var numCourses = parseInt(document.getElementById("numCourses").value);
+    var totalCredits = 0;
+    var totalGradePoints = 0;
+
+    for (var i = 1; i <= numCourses; i++) {
+        var credit = parseFloat(document.getElementById("credit" + i).value);
+        var grade = document.getElementById("grade" + i).value;
+        var gradePoints = getGradePoints(grade);
+        totalCredits += credit;
+        totalGradePoints += (credit * gradePoints);
+    }
+
+    var resultDiv = document.getElementById("result");
+    if (option === "gpa") {
+        var gpa = totalGradePoints / totalCredits;
+        resultDiv.innerHTML = "Your GPA is: " + gpa.toFixed(2);
+    } else if (option === "cgpa") {
+        var completedCredit = parseFloat(document.getElementById("completedCredit").value);
+        var currentCGPA = parseFloat(document.getElementById("currentCGPA").value);
+        var cgpa = ((totalGradePoints / totalCredits) * creditLimit + (completedCredit * currentCGPA)) / (completedCredit + creditLimit);
+        resultDiv.innerHTML = "Your current CGPA is: " + cgpa.toFixed(2);
+    }
+}
+
+function getGradePoints(grade) {
+    switch (grade.toUpperCase()) {
+        case "S":
+            return 10;
+        case "A":
+            return 9;
+        case "B":
+            return 8;
+        case "C":
+            return 7;
+        case "D":
+            return 6;
+        case "E":
+            return 4;
+        default:
+            return 0;
+    }
+}
+</script>
+</body>
+</html>
