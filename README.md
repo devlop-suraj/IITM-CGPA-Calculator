@@ -1,6 +1,9 @@
 Grade Calculator for IIT Madras CGPA
 This web-based Grade Calculator is specifically designed for students of the Indian Institute of Technology (IIT) Madras to calculate their Cumulative Grade Point Average (CGPA). It allows users to input their course credits and grades to determine their GPA or CGPA, depending on their selection.
 
+Link: https://devlop-suraj.github.io/IITM-CGPA-Calculator/
+
+
 Features:
 GPA Calculation: Users can select the GPA option to calculate their Grade Point Average for a particular semester.
 CGPA Calculation: Users can select the CGPA option to calculate their Cumulative Grade Point Average, considering their completed credits and current CGPA.
